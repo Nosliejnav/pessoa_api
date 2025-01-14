@@ -3,6 +3,7 @@ package com.example.cadastroPessoa.services;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -17,6 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.server.ResponseStatusException;
 
 //@ExtendWith(SpringExtension.class)
 //@ActiveProfiles("test")
@@ -33,6 +35,7 @@ class PessoaServiceTest {
     MockitoAnnotations.openMocks(this);
   }
 
+  //Teste do método save
   @Test
   public void testSave_NovaPessoa_SalvaComSucesso(){
 
@@ -72,7 +75,7 @@ class PessoaServiceTest {
 
   //Teste do método findById
   @Test
-  public void testFindById_ClienteExiste(){
+  public void testFindById_PessoaExiste(){
     //Arrange
     Integer id = 1;
     Pessoa pessoa = new Pessoa();
@@ -92,7 +95,7 @@ class PessoaServiceTest {
   }
 
   @Test
-  public void testFindById_ClienteNaoExistente(){
+  public void testFindById_PessoaNaoExistente(){
     //Arrange
     Integer id = 1;
 
@@ -103,10 +106,46 @@ class PessoaServiceTest {
       pessoaService.findPessoaPorId(id);
     });
 
-    assertEquals("Cliente não encontrado para o Id informado.", exception.getMessage());
+    assertEquals("Pessoa não encontrado para o Id informado.", exception.getMessage());
     verify(pessoaRepository, times(1)).findById(id);
   }
 
   //Teste do método delete
+  @Test
+  public void testDelete_PessoaExistente(){
+    // Arrange
+    Integer id = 1;
+    Pessoa pessoa = new Pessoa();
+    pessoa.setId(id);
+    
+    when(pessoaRepository.findById(id)).thenReturn(Optional.of(pessoa));
+    
+    // Act
+    pessoaService.deletePessoa(id);
+    
+    //Assert
+    verify(pessoaRepository, times(1)).delete(pessoa);
+  }
+
+  @Test
+  public void testDelete_PessoaNaoExistente(){
+    // Arrange
+    Integer id = 1;
+
+    when(pessoaRepository.findById(id)).thenReturn(Optional.empty());
+
+    // Act & Assert
+    ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+      pessoaService.deletePessoa(id);
+    });
+
+    assertEquals("Pessoa não encontrada", exception.getReason());
+    verify(pessoaRepository, never()).delete(any());
+
+
+
+  }
+  
+  
 }
 
