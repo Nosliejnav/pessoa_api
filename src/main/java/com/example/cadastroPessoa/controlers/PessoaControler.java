@@ -3,6 +3,8 @@ package com.example.cadastroPessoa.controlers;
 import com.example.cadastroPessoa.entities.Pessoa;
 import com.example.cadastroPessoa.services.PessoaService;
 import java.util.List;
+
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.validation.annotation.Validated;
@@ -28,7 +30,7 @@ public class PessoaControler {
   }
 
   @PostMapping
-  public Pessoa savePessoa(@RequestBody @Validated Pessoa pessoa){
+  public Pessoa savePessoa(@RequestBody @Valid Pessoa pessoa){
       return pessoaService.savePessoa(pessoa);
   }
 
@@ -39,7 +41,7 @@ public class PessoaControler {
   }
 
   @PutMapping("/{id}")
-  public void updatePessoa(@PathVariable @Validated Integer id, @RequestBody Pessoa pessoa){
+  public void updatePessoa(@PathVariable @Valid Integer id, @RequestBody Pessoa pessoa){
     pessoaService.updatePessoa(id, pessoa);
   }
 
