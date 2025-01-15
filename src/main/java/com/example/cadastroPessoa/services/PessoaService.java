@@ -28,7 +28,7 @@ public class PessoaService {
   public List<Pessoa> findAllPessoas() {
     List<Pessoa> pessoas = pessoaRepository.findAll();
     if (pessoas.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhuma Pessoa encontrado.");
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhuma Pessoa encontrada.");
     }
     return pessoas;
   }
@@ -44,20 +44,20 @@ public class PessoaService {
         return pessoaRepository.save(pessoaExiste);
       })
       .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-        "Pessoa não encontrado para Atualização."));
+        "Pessoa não encontrada para Atualização."));
   }
 
   public void deletePessoa(Integer id) {
     Pessoa pessoa = pessoaRepository.findById(id)
       .orElseThrow(
-        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pessoa não encontrado"));
+        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pessoa não encontrada"));
     pessoaRepository.delete(pessoa);
   }
 
   public Pessoa findPessoaPorId(Integer id) {
     Optional<Pessoa> pessoa = pessoaRepository.findById(id);
     if (pessoa.isEmpty()) {
-      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Nenhuma Pessoa encontrada.");
+      throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pessoa não encontrada para o Id informado.");
     }
     return pessoa.orElse(null);
   }
