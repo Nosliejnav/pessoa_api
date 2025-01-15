@@ -3,6 +3,7 @@ package com.example.cadastroPessoa.services;
 import com.example.cadastroPessoa.entities.Pessoa;
 import com.example.cadastroPessoa.repositories.PessoaRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -36,6 +37,7 @@ class PessoaServiceTest {
 
     //Teste do método save
     @Test
+    @DisplayName("Deve salvar uma pessoa.")
     public void testSave_NovaPessoa_SalvaComSucesso() {
 
         // Preparação
@@ -55,8 +57,32 @@ class PessoaServiceTest {
         verify(pessoaRepository, times(1)).save(pessoa);
     }
 
+//    @Test
+//    @DisplayName("Deve lançar erro ao tentar salvar uma pessoa já Cadastrada")
+//    public void testSave_PessoaJaExiste_ExcecaoLancada() {
+//        // Arrange
+//        Pessoa pessoa1 = new Pessoa();
+//        pessoa1.setId(1);
+//        pessoa1.setNome("Pessoa 1");
+//
+//        Pessoa pessoa2 = new Pessoa();
+//        pessoa2.setId(2);
+//        pessoa2.setNome("Pessoa 2");
+//
+//        when(pessoaRepository.save(pessoa1.getNome(),pessoa2.getNome())).thenReturn();
+//
+//        //Act & Assert
+//        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+//            pessoaService.savePessoa(pessoa);
+//        });
+//
+//        assertEquals("CPF já Cadastrado", exception.getMessage());
+//        verify(pessoaRepository, never()).save(pessoa);
+//    }
+
     @Test
-    public void testSave_PessoaJaExiste_ExcecaoLancada() {
+    @DisplayName("Deve lançar erro ao tentar salvar um cpf da pessoa já Cadastrada.")
+    public void testSave_CpfJaExiste_ExcecaoLancada() {
         // Arrange
         Pessoa pessoa = new Pessoa();
         pessoa.setCpf("12345678901");
@@ -68,12 +94,13 @@ class PessoaServiceTest {
             pessoaService.savePessoa(pessoa);
         });
 
-        assertEquals("CPF já Cadastrado", exception.getMessage());
+        assertEquals("CPF já Cadastrado.", exception.getMessage());
         verify(pessoaRepository, never()).save(pessoa);
     }
 
     //Teste do método findByAll
     @Test
+    @DisplayName("Deve obter todas as pessoas Cadastradas.")
     public void testFindAllPessoas_PessoasExistem() {
         // Arrange
         Pessoa pessoa1 = new Pessoa();
@@ -99,6 +126,7 @@ class PessoaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve lançar erro ao não ter nenhuma pessoa Cadastrada.")
     public void testFindAllPessoas_NenhumaPessoa() {
         // Arrange
         when(pessoaRepository.findAll()).thenReturn(Collections.emptyList());
@@ -115,6 +143,7 @@ class PessoaServiceTest {
 
     // Teste do método update
     @Test
+    @DisplayName("Deve Atualizar Pessoa Existente.")
     public void testUpdate_PessoaExistente() {
         //Arrange
         Integer id = 1;
@@ -144,6 +173,7 @@ class PessoaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve lançar erro ao não encontrar pessoa para Atualização.")
     public void testUpdate_PessoaNaoExiste(){
         //Arrange
 
@@ -167,6 +197,7 @@ class PessoaServiceTest {
 
     //Teste do método delete
     @Test
+    @DisplayName("Deve Deletar Pessoa Existente.")
     public void testDelete_PessoaExistente() {
         // Arrange
         Integer id = 1;
@@ -183,6 +214,7 @@ class PessoaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve lançar erro ao não encontrar Pessoa Existente para Deletar.")
     public void testDelete_PessoaNaoExistente() {
         // Arrange
         Integer id = 1;
@@ -194,13 +226,14 @@ class PessoaServiceTest {
             pessoaService.deletePessoa(id);
         });
 
-        assertEquals("Pessoa não encontrada", exception.getReason()); // Corrigido para corresponder ao código atual
+        assertEquals("Pessoa não encontrada.", exception.getReason()); // Corrigido para corresponder ao código atual
         verify(pessoaRepository, never()).delete(any());
     }
 
 
     //Teste do método findById
     @Test
+    @DisplayName("Deve obter uma pessoa por Id.")
     public void testFindById_PessoaExiste() {
         //Arrange
         Integer id = 1;
@@ -221,6 +254,7 @@ class PessoaServiceTest {
     }
 
     @Test
+    @DisplayName("Deve lançar erro ao não obter Pessoa Existente por id.")
     public void testFindById_PessoaNaoExistente() {
         // Arrange
         Integer id = 1;

@@ -20,7 +20,7 @@ public class PessoaService {
   public Pessoa savePessoa(Pessoa pessoa) {
     Pessoa pessoaExiste = pessoaRepository.findByCpf(pessoa.getCpf());
     if (pessoaExiste != null){
-      throw new RuntimeException("CPF já Cadastrado");
+      throw new RuntimeException("CPF já Cadastrado.");
     }
     return pessoaRepository.save(pessoa);
   }
@@ -50,7 +50,7 @@ public class PessoaService {
   public void deletePessoa(Integer id) {
     Pessoa pessoa = pessoaRepository.findById(id)
       .orElseThrow(
-        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pessoa não encontrada"));
+        () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Pessoa não encontrada."));
     pessoaRepository.delete(pessoa);
   }
 
